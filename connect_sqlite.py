@@ -146,25 +146,25 @@ studentTuples = [
 
 eventTuples = [
     """
-    INSERT INTO Event VALUES(001, 'Valentine's Day Event', TO_DATE('2022-02-14', 'YYYY-MM-DD'), TO_DATE('2022-02-15', 'YYYY-MM-DD'));
+    INSERT INTO Event VALUES(001, 'Valentine Day Event', '2022-02-14', '2022-02-15');
     """,
     """
-    INSERT INTO Event VALUES(002, 'Homecoming', TO_DATE('2022-11-01', 'YYYY-MM-DD'), TO_DATE('2022-11-08', 'YYYY-MM-DD'));
+    INSERT INTO Event VALUES(002, 'Homecoming', '2022-11-01', '2022-11-08');
     """,
     """
-    INSERT INTO Event VALUES(003, 'Graduation', TO_DATE('2022-05-13', 'YYYY-MM-DD'), TO_DATE('2022-05-14', 'YYYY-MM-DD'));
+    INSERT INTO Event VALUES(003, 'Graduation', '2022-05-13', '2022-05-14');
     """,
     """
-    INSERT INTO Event VALUES(004, 'Club Fair', TO_DATE('2021-12-17', 'YYYY-MM-DD'), TO_DATE('2022-01-18', 'YYYY-MM-DD'));
+    INSERT INTO Event VALUES(004, 'Club Fair', '2021-12-17', '2022-01-18');
     """,
     """
-    INSERT INTO Event VALUES(005, 'Major Advising', TO_DATE('2022-03-12', 'YYYY-MM-DD'), TO_DATE('2022-03-20', 'YYYY-MM-DD'));
+    INSERT INTO Event VALUES(005, 'Major Advising', '2022-03-12', '2022-03-20');
     """
 ]
 
 hostingTuples = [
     """
-    INSERT INTO Hosting VALUES('Interactive Media', 'Valentine's Day Event');
+    INSERT INTO Hosting VALUES('Interactive Media', 'Valentine Day Event');
     """,
     """
     INSERT INTO Hosting VALUES('Marketing', 'Homecoming');
@@ -222,7 +222,13 @@ attendingTuples = [
     """
 ]
 
+allTuples = [departmentTuples, majorTuples, studentTuples, eventTuples, hostingTuples, decalringTuples, attendingTuples]
 
+for relations in allTuples:
+    print(relations)
+    for tuples in relations:
+        print(tuples)
+        #cursor.execute(tuples)
 
 
 # Insert row into table
@@ -233,22 +239,22 @@ attendingTuples = [
 # cursor.execute(query)
 
 # Select data
-# query = """
-#    SELECT *
-#    FROM Person
-#    """
-# cursor.execute(query)
+query = """
+    SELECT s.stu_name, m.major_name
+    FROM Student s, Major m
+    """
+cursor.execute(query)
 
 # Extract column names from cursor
-# column_names = [row[0] for row in cursor.description]
+column_names = [row[0] for row in cursor.description]
 
 # Fetch data and load into a pandas dataframe
-# table_data = cursor.fetchall()
-# df = pd.DataFrame(table_data, columns=column_names)
+table_data = cursor.fetchall()
+df = pd.DataFrame(table_data, columns=column_names)
 
 # Examine dataframe
-# print(df)
-# print(df.columns)
+print(df)
+print(df.columns)
 
 # Example to extract a specific column
 # print(df['name'])
