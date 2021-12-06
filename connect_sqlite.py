@@ -155,11 +155,71 @@ eventTuples = [
     INSERT INTO Event VALUES(003, 'Graduation', TO_DATE('2022-05-13', 'YYYY-MM-DD'), TO_DATE('2022-05-14', 'YYYY-MM-DD'));
     """,
     """
-    INSERT INTO Event VALUES(004, 'Christmas Break', TO_DATE('2021-12-17', 'YYYY-MM-DD'), TO_DATE('2022-01-18', 'YYYY-MM-DD'));
+    INSERT INTO Event VALUES(004, 'Club Fair', TO_DATE('2021-12-17', 'YYYY-MM-DD'), TO_DATE('2022-01-18', 'YYYY-MM-DD'));
     """,
     """
-    INSERT INTO Event VALUES(005, 'Spring Break', TO_DATE('2022-03-12', 'YYYY-MM-DD'), TO_DATE('2022-03-20', 'YYYY-MM-DD'));
+    INSERT INTO Event VALUES(005, 'Major Advising', TO_DATE('2022-03-12', 'YYYY-MM-DD'), TO_DATE('2022-03-20', 'YYYY-MM-DD'));
+    """
+]
+
+hostingTuples = [
+    """
+    INSERT INTO Hosting VALUES('Interactive Media', 'Valentine's Day Event');
     """,
+    """
+    INSERT INTO Hosting VALUES('Marketing', 'Homecoming');
+    """,
+    """
+    INSERT INTO Hosting VALUES('Computer Science', 'Graduation');
+    """,
+    """
+    INSERT INTO Hosting VALUES('Biology', 'Club Fair');
+    """,
+    """
+    INSERT INTO Hosting VALUES('Computer Science', 'Club Fair');
+    """,
+    """
+    INSERT INTO Hosting VALUES('Mathematics', 'Major Advising');
+    """
+]
+
+decalringTuples = [
+    """
+    INSERT INTO Declaring VALUES('CSC', 6487);
+    """,
+    """
+    INSERT INTO Declaring VALUES('CMK', 0248);
+    """,
+    """
+    INSERT INTO Declaring VALUES('GDS', 6487);
+    """,
+    """
+    INSERT INTO Declaring VALUES('MTH', 0302);
+    """,
+    """
+    INSERT INTO Declaring VALUES('BIO', 2849);
+    """,
+    """
+    INSERT INTO Declaring VALUES('CSC', 0001);
+    """
+]
+
+attendingTuples = [
+    """
+    INSERT INTO Attending VALUES(6487, 003);
+    """,
+    """
+    INSERT INTO Attending VALUES(0001, 004);
+    """,
+    """
+    INSERT INTO Attending VALUES(0248, 004);
+    """,
+    """
+    INSERT INTO Attending VALUES(0302, 003);
+    """,
+    """
+    INSERT INTO Attending VALUES(2849, 005);
+    """
 ]
 
 
