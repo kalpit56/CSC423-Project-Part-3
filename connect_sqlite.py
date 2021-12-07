@@ -11,7 +11,7 @@ cursor = db_connect.cursor()
 tablesCreated = False
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
 tables = cursor.fetchall()
-if(len(tables) > 0):
+if(len(tables) == 7):
     tablesCreated = True
 
 # dropList = ["DROP TABLE Department"]
@@ -27,8 +27,8 @@ query = ["""
     """,
     """
     CREATE TABLE Major(
-        major_code VARCHAR(3) NOT NULL,
-        major_name VARCHAR(255) NOT NULL,
+        major_code CHAR(3) NOT NULL,
+        major_name VARCHAR(255) UNIQUE NOT NULL,
         department_name VARCHAR(255),
         PRIMARY KEY(major_code),
         FOREIGN KEY(department_name) REFERENCES Department(department_name) ON DELETE SET NULL
@@ -38,7 +38,7 @@ query = ["""
     CREATE TABLE Student(
         stu_id INT NOT NULL,
         stu_name VARCHAR(255),
-        stu_initials VARCHAR(3),
+        stu_initials VARCHAR(3) CHECK (LEN(stu_initials) > 1,
         PRIMARY KEY(stu_id),
         CHECK(LENGTH(stu_initials) > 1)
     );
@@ -46,8 +46,8 @@ query = ["""
     """
     CREATE TABLE Event(
         event_num INT NOT NULL,
-        event_name VARCHAR(255),
-        start_date DATE CHECK(start_date > Current_date),
+        event_name VARCHAR(255) UNIQUE NOT NULL,
+        start_date DATE CHECK(start_date > Current_date) UNIQUE NOT NULL,
         end_date DATE,
         PRIMARY KEY(event_num),
         CONSTRAINT GREATER CHECK (end_date > start_date)
@@ -58,8 +58,8 @@ query = ["""
         department_name VARCHAR(255) NOT NULL,
         event_name VARCHAR(255) NOT NULL,
         PRIMARY KEY(department_name, event_name),
-        FOREIGN KEY(department_name) REFERENCES Department(department_name) ON DELETE SET NULL,
-        FOREIGN KEY(event_name) REFERENCES Event(event_name) ON DELETE SET NULL
+        FOREIGN KEY(department_name) REFERENCES Department(department_name),
+        FOREIGN KEY(event_name) REFERENCES Event(event_name)
     );
     """, 
     """
@@ -67,8 +67,8 @@ query = ["""
         major_code VARCHAR(3) NOT NULL,
         stu_id INT NOT NULL,
         PRIMARY KEY(major_code, stu_id),
-        FOREIGN KEY(major_code) REFERENCES Major(major_code) ON DELETE SET NULL,
-        FOREIGN KEY(stu_id) REFERENCES Student(stu_id) ON DELETE SET NULL
+        FOREIGN KEY(major_code) REFERENCES Major(major_code),
+        FOREIGN KEY(stu_id) REFERENCES Student(stu_id)
     );
     """, 
     """
@@ -76,8 +76,8 @@ query = ["""
         stu_id INT NOT NULL,
         event_num INT NOT NULL,
         PRIMARY KEY(stu_id, event_num),
-        FOREIGN KEY(stu_id) REFERENCES Student(stu_id) ON DELETE SET NULL,
-        FOREIGN KEY(event_num) REFERENCES Event(event_num) ON DELETE SET NULL
+        FOREIGN KEY(stu_id) REFERENCES Student(stu_id),
+        FOREIGN KEY(event_num) REFERENCES Event(event_num)
     );
     """,
     ]
@@ -87,6 +87,10 @@ if(tablesCreated == False):
     for entry in query:
         print(entry)
         cursor.execute(entry)
+
+# Do we need to put alternate keys when creating tables?
+
+# see how to get len in sqlite
 
 
 
@@ -180,6 +184,15 @@ hostingTuples = [
     """,
     """
     INSERT INTO Hosting VALUES('Mathematics', 'Major Advising');
+    """,
+    """
+    INSERT INTO Hosting VALUES('Marketing', 'Graduation');
+    """,
+    """
+    INSERT INTO Hosting VALUES('Biology', 'Graduation');
+    """,
+    """
+    INSERT INTO Hosting VALUES('Interactive Media', 'Graduation');
     """
 ]
 
@@ -244,6 +257,10 @@ query = """
     FROM Student s, Major m
     """
 cursor.execute(query)
+
+
+# Queries
+# How many people attended event 004?
 
 # Extract column names from cursor
 column_names = [row[0] for row in cursor.description]
