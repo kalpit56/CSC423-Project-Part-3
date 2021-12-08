@@ -14,12 +14,10 @@ tables = cursor.fetchall()
 if(len(tables) == 7):
     tablesCreated = True
 
-# dropList = ["DROP TABLE Department"]
-
 # String variable for passing queries to cursor
-query = ["""
+createTables = ["""
     CREATE TABLE Department(
-    department_name VARCHAR(255) NOT NULL,
+    department_name VARCHAR(255) NOT NULL CHECK(department_name LIKE 'Department of %'),
     chair_name VARCHAR(255),
     num_of_faculty INT,
     PRIMARY KEY(department_name)
@@ -38,7 +36,7 @@ query = ["""
     CREATE TABLE Student(
         stu_id INT NOT NULL,
         stu_name VARCHAR(255),
-        stu_initials VARCHAR(3) CHECK (LEN(stu_initials) > 1,
+        stu_initials VARCHAR(3) CHECK(length(stu_initials) > 1),
         PRIMARY KEY(stu_id),
         CHECK(LENGTH(stu_initials) > 1)
     );
@@ -79,54 +77,48 @@ query = ["""
         FOREIGN KEY(stu_id) REFERENCES Student(stu_id),
         FOREIGN KEY(event_num) REFERENCES Event(event_num)
     );
-    """,
+    """
     ]
 
 # Execute query, the result is stored in cursor
 if(tablesCreated == False):
-    for entry in query:
-        print(entry)
+    for entry in createTables:
         cursor.execute(entry)
-
-# Do we need to put alternate keys when creating tables?
-
-# see how to get len in sqlite
-
 
 
 departmentTuples = [
     """
-    INSERT INTO Department VALUES('Computer Science', 'Geoff Sutcliffe', 25);
+    INSERT INTO Department VALUES('Department of Computer Science', 'Geoff Sutcliffe', 25);
     """,
     """
-    INSERT INTO Department VALUES('Marketing', 'John Smith', 50);
+    INSERT INTO Department VALUES('Department of Marketing', 'John Smith', 50);
     """,
     """
-    INSERT INTO Department VALUES('Mathematics', 'John Doe', 43);
+    INSERT INTO Department VALUES('Department of Mathematics', 'John Doe', 43);
     """,
     """
-    INSERT INTO Department VALUES('Interactive Media', 'Robert Brown', 82);
+    INSERT INTO Department VALUES('Department of Interactive Media', 'Robert Brown', 82);
     """,
     """
-    INSERT INTO Department VALUES('Biology', 'Mary Williams', 101);
+    INSERT INTO Department VALUES('Department of Biology', 'Mary Williams', 101);
     """
 ]
 
 majorTuples = [
     """
-    INSERT INTO Major VALUES('CSC', 'Computer Science', 'Computer Science');
+    INSERT INTO Major VALUES('CSC', 'Computer Science', 'Department of Computer Science');
     """,
     """
-    INSERT INTO Major VALUES('CMK', 'Corporate Marketing', 'Marketing');
+    INSERT INTO Major VALUES('CMK', 'Corporate Marketing', 'Department of Marketing');
     """,
     """
-    INSERT INTO Major VALUES('BIO', 'Biology', 'Biology');
+    INSERT INTO Major VALUES('BIO', 'Biology', 'Department of Biology');
     """,
     """
-    INSERT INTO Major VALUES('MTH', 'Mathematics', 'Mathematics');
+    INSERT INTO Major VALUES('MTH', 'Mathematics', 'Department of Mathematics');
     """,
     """
-    INSERT INTO Major VALUES('GDS', 'Game Design', 'Interactive Media');
+    INSERT INTO Major VALUES('GDS', 'Game Design', 'Department of Interactive Media');
     """
 ]
 
@@ -168,31 +160,31 @@ eventTuples = [
 
 hostingTuples = [
     """
-    INSERT INTO Hosting VALUES('Interactive Media', 'Valentine Day Event');
+    INSERT INTO Hosting VALUES('Department of Interactive Media', 'Valentine Day Event');
     """,
     """
-    INSERT INTO Hosting VALUES('Marketing', 'Homecoming');
+    INSERT INTO Hosting VALUES('Department of Marketing', 'Homecoming');
     """,
     """
-    INSERT INTO Hosting VALUES('Computer Science', 'Graduation');
+    INSERT INTO Hosting VALUES('Department of Computer Science', 'Graduation');
     """,
     """
-    INSERT INTO Hosting VALUES('Biology', 'Club Fair');
+    INSERT INTO Hosting VALUES('Department of Biology', 'Club Fair');
     """,
     """
-    INSERT INTO Hosting VALUES('Computer Science', 'Club Fair');
+    INSERT INTO Hosting VALUES('Department of Computer Science', 'Club Fair');
     """,
     """
-    INSERT INTO Hosting VALUES('Mathematics', 'Major Advising');
+    INSERT INTO Hosting VALUES('Department of Mathematics', 'Major Advising');
     """,
     """
-    INSERT INTO Hosting VALUES('Marketing', 'Graduation');
+    INSERT INTO Hosting VALUES('Department of Marketing', 'Graduation');
     """,
     """
-    INSERT INTO Hosting VALUES('Biology', 'Graduation');
+    INSERT INTO Hosting VALUES('Department of Biology', 'Graduation');
     """,
     """
-    INSERT INTO Hosting VALUES('Interactive Media', 'Graduation');
+    INSERT INTO Hosting VALUES('Department of Interactive Media', 'Graduation');
     """
 ]
 
@@ -232,55 +224,127 @@ attendingTuples = [
     """,
     """
     INSERT INTO Attending VALUES(2849, 005);
+    """,
+    """
+    INSERT INTO Attending VALUES(0001, 005);
     """
 ]
 
 allTuples = [departmentTuples, majorTuples, studentTuples, eventTuples, hostingTuples, decalringTuples, attendingTuples]
 
 for relations in allTuples:
-    print(relations)
     for tuples in relations:
-        print(tuples)
-        #cursor.execute(tuples)
+        cursor.execute(tuples)
 
-
-# Insert row into table
-# query = """
-#    INSERT INTO Person
-#    VALUES (1, "person1");
-#    """
-# cursor.execute(query)
-
-# Select data
-query = """
-    SELECT s.stu_name, m.major_name
-    FROM Student s, Major m
-    """
-cursor.execute(query)
-
-
-# Queries
-# How many people attended event 004?
-
-# Extract column names from cursor
-column_names = [row[0] for row in cursor.description]
-
-# Fetch data and load into a pandas dataframe
-table_data = cursor.fetchall()
-df = pd.DataFrame(table_data, columns=column_names)
-
-# Examine dataframe
-print(df)
-print(df.columns)
-
-# Example to extract a specific column
-# print(df['name'])
-
-
+print()
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
 tables = cursor.fetchall()
-print(tables)
 
+
+printEachTableQueries = [
+    """
+    SELECT * FROM Department;
+    """,
+    """
+    SELECT * FROM Major;
+    """,
+    """
+    SELECT * FROM Student;
+    """,
+    """
+    SELECT * FROM Event;
+    """,
+    """
+    SELECT * FROM Hosting;
+    """,
+    """
+    SELECT * FROM Declaring;
+    """,
+    """
+    SELECT * FROM Attending;
+    """
+]
+
+print("Snapshot of tables after all example tuples have been inserted: ")
+print()
+for(entry, table) in zip(printEachTableQueries, tables):
+    cursor.execute(entry)
+    print(table)
+    column_names = [row[0] for row in cursor.description]
+
+    # Fetch data and load into a pandas dataframe
+    table_data = cursor.fetchall()
+    df = pd.DataFrame(table_data, columns=column_names)
+
+    # Examine dataframe
+    print(df)
+    print()
+
+
+queryAnswers = [
+    """
+    SELECT event_name
+    FROM Event e, Attending a
+    WHERE a.stu_id = 0001 AND a.event_num = e.event_num;
+    """,
+    """
+    SELECT SUM(num_of_faculty)
+    FROM Department;
+    """,
+    """
+    SELECT s.stu_name, m.major_name, m.department_name
+    FROM Declaring d, Major m, Student s
+    WHERE d.major_code = m.major_code AND d.stu_id = s.stu_id
+    GROUP BY s.stu_name;
+    """,
+    """
+    SELECT h.event_name, COUNT(h.department_name)
+    FROM Hosting h, Department d
+    WHERE d.department_name = h.department_name
+    GROUP BY h.event_name;
+    """,
+    """
+    SELECT major_name, chair_name
+    FROM Department d, Major m
+    WHERE m.department_name = d.department_name
+    GROUP BY major_name;
+    """,
+    """
+    SELECT e.event_name, d.department_name, d.chair_name
+    FROM Event e, Department d, Hosting h
+    WHERE e.start_date > '2022-03-31' AND e.event_name = h.event_name AND h.department_name = d.department_name
+    GROUP BY e.event_name;
+    """,
+    """
+    SELECT COUNT(stu_id) AS NUM_OF_STUDENTS
+    FROM Attending
+    WHERE event_num = 004;
+    """
+]
+
+queryQuestions = [
+    "List all the events that the student with the stu_id 0001 attended.",
+    "How many faculty members are there in the university?",
+    "List the name of the major and department of the major that each student has declared.",
+    "List the number of departments that host each event.",
+    "List the chair names of each major.",
+    "List the event name, department name, and chair of department for all events that are scheduled after March 2022.",
+    "How many people attended event 004?"
+]
+
+print("Example queries: ")
+print()
+for (solutions, questions) in zip(queryAnswers, queryQuestions):
+    cursor.execute(solutions)
+    print()
+    print(questions)
+    print()
+    column_names = [row[0] for row in cursor.description]
+    table_data = cursor.fetchall()
+    df = pd.DataFrame(table_data, columns=column_names)
+
+    # Examine dataframe
+    print(df)
 
 # Commit any changes to the database
 db_connect.commit()
