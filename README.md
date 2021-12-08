@@ -3,7 +3,7 @@
 
 ## Please download the .py file to run the database. 
 
-## ** When running the .py file multiple times, ensure that test.db does not exist before you run. **
+##**When running the .py file multiple times, ensure that test.db does not exist before you run.**
 
 The code is split into 4 different parts. 
 Part 1: 
