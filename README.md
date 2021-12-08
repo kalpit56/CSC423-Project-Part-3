@@ -7,13 +7,13 @@ Please download the .py file to run the database.
 
 The code is split into 4 different parts.
 
-Part 1: 
+### Part 1: 
 
 List to create all tables.
 
 Iterating that list to run the SQL commands.
   
-Part 2:
+### Part 2:
 
 Lists to Insert into each table.
 
@@ -21,13 +21,13 @@ Iterating the list of lists to run each SQL command.
   
 At this point, we have a created database with tuples inserted.
 
-Part 3: 
+### Part 3: 
 
 List of simple SQL queries to list all contents of each table.
 
 Iterating the list to run and print a snapshop of each table.
   
-Part 4:
+### Part 4:
 
   List of query questions.
 
