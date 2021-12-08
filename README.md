@@ -28,6 +28,7 @@ List of simple SQL queries to list all contents of each table.
 Iterating the list to run and print a snapshop of each table.
   
 Part 4:
+
   List of query questions.
 
   List of query solutions in SQL.
